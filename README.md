@@ -1,1 +1,0 @@
-# scgfailure-hotmobile24

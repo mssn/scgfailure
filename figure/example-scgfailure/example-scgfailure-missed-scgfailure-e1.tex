@@ -1,0 +1,308 @@
+% Version: 1.0  2017-03-08 init version
+% Note: to use package fontspec,
+% use XeLaTeX to compile
+
+\documentclass{article}
+\usepackage{siunitx}
+% \usepackage{tikz}
+\usepackage{pgfplots}
+\usepackage{pgfplotstable}
+%\usepackage{verbatim}
+%\usepackage{sansmath}
+\usepackage{blindtext}
+\usepackage[active,tightpage]{preview}
+%\usepgfplotslibrary{statistics}
+\PreviewEnvironment{tikzpicture}
+\setlength\PreviewBorder{1pt}
+\usetikzlibrary{patterns}
+%\usetikzlibrary{pgfplots.statistics}
+\usetikzlibrary{plotmarks}
+
+\pgfplotsset{compat=newest}
+
+%\usepackage{fontspec}
+%\setmainfont[
+%BoldFont={Arial Bold},
+%ItalicFont={Arial Italic},
+%BoldItalicFont={Arial Bold Italic}
+%]{Arial}
+
+
+\makeatletter
+\pgfplotsset{
+my filter/.style args={every#1between#2and#3}{%
+/pgfplots/x filter/.append code={%
+\ifnum\coordindex<#2%
+  % Nothing
+\else% Did we pass #3?
+  \ifnum\coordindex>#3%
+    %Nothing
+  \else% Ok filter is on, don't disturb \pgfmathresult for convenience
+    \pgfmathsetmacro\temp{int(mod(\coordindex,#1))}%
+    \ifnum0=\temp\relax% Are we on the nth point?
+      % Yes do nothing let it pass
+    \else% discard it
+      \let\pgfmathresult\pgfutil@empty
+    \fi%
+  \fi%
+\fi%
+}}}
+\makeatother
+
+\pgfplotsset{xtick style={draw=none}}
+
+\usepgfplotslibrary{statistics}
+\makeatletter
+\pgfplotsset{
+	boxplot prepared from table/.code={
+		\def\tikz@plot@handler{\pgfplotsplothandlerboxplotprepared}%
+		\pgfplotsset{
+			/pgfplots/boxplot prepared from table/.cd,
+			#1,
+		}
+	},
+	/pgfplots/boxplot prepared from table/.cd,
+	table/.code={\pgfplotstablecopy{#1}\to\boxplot@datatable},
+	row/.initial=0,
+	make style readable from table/.style={
+		#1/.code={
+			\pgfplotstablegetelem{\pgfkeysvalueof{/pgfplots/boxplot prepared from table/row}}{##1}\of\boxplot@datatable
+			\pgfplotsset{boxplot/#1/.expand once={\pgfplotsretval}}
+		}
+	},
+make style readable from table=draw position,
+	make style readable from table=lower whisker,
+	make style readable from table=upper whisker,
+	make style readable from table=lower quartile,
+	make style readable from table=upper quartile,
+	make style readable from table=median,
+	make style readable from table=lower notch,
+	make style readable from table=upper notch
+}
+\makeatother
+
+\makeatletter
+\pgfplotsset{% basis: example on p. 262 of the pgfplots manual
+	/pgfplots/area legend/.style={
+		/pgfplots/legend image code/.code={
+			\draw[#1] (0cm,0.15em) rectangle (0.6*\pgfplotbarwidth,-0.15em);
+		}, },
+}
+\makeatother
+
+%\definecolor{myred}{RGB}{202,0,32}
+%\definecolor{myorange}{RGB}{244,165,130}
+%\definecolor{myviolet}{RGB}{194,165,207}
+%\definecolor{mycyan}{RGB}{146,197,222}
+%\definecolor{myblue}{RGB}{5,113,176}
+%\definecolor{mygreen}{RGB}{127,191,123}
+%\definecolor{mytile}{RGB}{27,120,55}
+%\definecolor{myblack}{RGB}{60,60,60}
+% \definecolor{palette3}{RGB}{247,247,247}
+
+\definecolor{myred}{HTML}{C00000}
+\definecolor{mypurple}{HTML}{7030A0}
+\definecolor{myblue}{HTML}{0070C0}
+\definecolor{mygreenr}{HTML}{00B050}
+
+
+
+
+\begin{document}
+
+% Example-A-2: 
+%\pgfplotstableread[col sep = comma]{Example-A-2-cellset-pcell-only.csv}\cellsettable
+\pgfplotstableread[col sep = comma]{missed-e1-20230430-100900_c2-t-h.csv}\cellsettable
+\pgfplotstableread[col sep = comma]{missed-e1-20230430-100900_c2-t-h-poor.csv}\cellsettablepoor
+%\pgfplotstableread[col sep = comma]{Example-A-2-thput-0.1.csv}\speedtable
+%\pgfplotstableread[col sep = comma]{Example-A-2-thput-1.csv}\secspeedtable
+% starttime: 1640549190;
+% endtime: 1640636250;
+% xmin = 0;
+% xmax = 660; 
+
+\begin{tikzpicture}
+%\pgfkeys{
+%	/pgf/number format/precision=2, 
+%	/pgf/number format/fixed zerofill=true,
+%	/pgf/number format/fixed
+%}
+
+\begin{axis}[
+    % my filter=every 100 between 0 and 18000,
+    % ybar,
+    %name=plot1,
+    boxplot/draw direction=y,
+    grid style={line width=.1pt, draw=gray!10},major grid style={line width=.2pt,draw=gray!50},
+    minor tick num=2,
+    %box plot width=0.5em,
+    %axis y,
+    %axis y line*=left,
+    %axis x line*=middle,
+    %y dir=reverse,
+    % box plot width=0.5em,
+    %axis y line*=left,
+    %axis x line*=top, %middle,
+    width   = 2.8 cm,
+    height  =2.8 cm,% 1.5 cm
+    % w:h: 14cm vs 4cm (single column
+    % w:h: 7cm vs 4cm (1/2 column)
+% example 1
+%    ymax    = 240,
+%    ymin    = -240,
+	xmin=0,
+	xmax=30,	
+%    ytick={0, 100, 200},
+%    yticklabels={0,100, 200},
+   ymax= 510,
+   ymin= 0,	
+%    ytick={0, 200, 400},
+%    yticklabels={0, 200,400},
+    ytick={0, 100, 200, 300, 400, 500},
+    yticklabels={0, 100, 200, 300, 400, 500},
+     xtick pos=left,
+%    xtick={0,10, 20, 30},
+%    xticklabels ={0s,10s, 20s, 30s},
+    xtick={3,12, 21, 30}, % manually adjust xtick
+    xticklabels ={0s,10s, 20s, 30s},
+    scale only axis = true,
+    xtick align = inside,
+    tick label style={/pgf/number format/assume math mode=true},
+    xticklabel style = {
+    	%font=\normalsize,
+	yshift =  2 pt,
+        xshift =  -5 pt,
+    },
+    yticklabel style = {
+    %font=\normalsize,
+   	yshift =  0 pt,
+        xshift =  3 pt,
+    },
+    %xticklabel style={yshift=3ex, anchor=south},
+    %xticklabels={},
+    % % xticklabel pos=right,
+    % xtick pos = left,
+    % ytick pos = left,
+    % % yticklabel pos=right,
+    % % enlargelimits=0.15,
+    ylabel={DL Thput (Mbps)},
+    ylabel style={
+        %font=\normalsize,
+        yshift =  -7pt,
+        xshift =  0 pt,
+    },
+    % xlabel={Location in static tests},
+%    xlabel style={
+%        font=\normalsize,
+%        at={(axis description cs:0.5,-0.1)},
+%        anchor=north,
+%        xshift = 0 pt,
+%    },
+    legend style={
+	 at      = {(1, 1)},
+%        legend entries = {Default runs, Customized runs},
+        font    = \small, % \normalsize,
+        fill    = none,
+        draw    = none,
+%        anchor  = south east,
+        legend cell align   = left,
+        legend columns      = 1,
+    },
+%clip=false
+    ]
+    
+\addplot[
+	%only marks,
+	%smooth,
+	%every mark/.append style={solid,fill=white},
+	% mark=star,
+	%mark=none,
+	%mark size=1pt,
+	color       = myblue,
+	% draw opacity=0.7,
+	line width  = 0.7pt,
+	% line cap    = round,
+	% line join   = round,
+	%each nth point={1},
+	%draw = red,
+	%fill = red,
+	]
+	table[x=time_delta,y=throughput_dl]      from \cellsettable;
+	
+	\addplot[
+	%only marks,
+	%smooth,
+	%every mark/.append style={solid,fill=white},
+	% mark=star,
+	%mark=none,
+	%mark size=1pt,
+	color       = myred,
+	% draw opacity=0.7,
+	line width  = 0.7pt,
+	% line cap    = round,
+	% line join   = round,
+	%each nth point={1},
+	%draw = red,
+	%fill = red,
+	]
+	table[x=time_delta,y=throughput_dl]      from \cellsettablepoor;
+	
+	\addplot+[mark=none, dotted,mypurple,line width=1.5pt] coordinates {(7.2,0) (7.2,500)};
+	%\legend{4G+5G, 4G only}
+	\addplot[mark size=4pt, color=mypurple, mark= x,line width=1pt] coordinates {(7.2,510)};
+	%\node[mark size=2pt,color=mypurple,rotate=180] at (8,530) {\pgfuseplotmark{triangle}};
+	
+	\addplot+[mark=none, dashed,myblue,line width=0.5pt] coordinates {(0,471.3) (12,471.3)};
+	
+	\addplot+[mark=none, dashed,myred,line width=0.5pt] coordinates {(7.2,46.5) (30,46.5)};
+	
+	\draw[myred,<->,line width=0.5pt]  (axis cs:9,46.5) -- (axis cs: 9,471.3);
+	
+	\node[myred,right] at (axis cs: 9.5,320) {\small \bf 425Mbps};
+	\node[myred,right] at (axis cs: 11.5,270) {\small \bf (9.1x)};  
+
+ 
+%\addplot+[
+%        %only marks,
+%        smooth,
+%        solid,
+%        %dashed,
+%        %every mark/.append style={solid,fill=white},
+%        % mark=star,
+%        mark=none,
+%        %mark size=1pt,
+%        color       = red,
+%        draw opacity=0.5,
+%        line width  = 1pt,
+%        % line cap    = round,
+%        % line join   = round,
+%        %each nth point={1},
+%        %draw = red,
+%    ]
+%    table[x=time_delay,y=thputPerSecond]      from \secspeedtable;
+
+%\addplot+[mark=none, densely dashed,gray,line width=0.1pt] coordinates {(0,20) (600,20)};
+%\legend{Speed (0.1s), Speed (1s)}
+%\legend{Speed (100ms), Speed (1s)}
+%\addplot[mark=none, dashed, gray] coordinates {(0,2) (24,2)};
+
+%\addplot+[mark=none, densely dashed,gray,line width=0.1pt] coordinates {(65,450) (65,500)};
+%\addplot+[mark=none, densely dashed,gray,line width=0.1pt] coordinates {(95,450) (95,500)};
+%\addplot+[mark=none, densely dashed,gray,line width=0.1pt] coordinates {(125,450) (125,500)};
+
+%\draw[red,dashed]  (axis cs:10.3,0) -- (axis cs: (10.3,600);
+%\draw[red,dotted]  (axis cs:24.5,0) -- (axis cs: (24.5,600);
+%\draw[red,dotted]  (axis cs:117.6340201,0) -- (axis cs: (117.6340201,600);
+%\draw[red,dotted]  (axis cs:128.75,0) -- (axis cs: (128.75,600);
+
+%\node[red,right] at (axis cs: 12,200) {\small \bf 5G};     
+%\draw[red,->]  (axis cs:10,200) -- (axis cs: 7.3,200);
+%\draw[red,->]  (axis cs:20,200) -- (axis cs: 24.5,200);
+%\draw[red,<->]  (axis cs:117.7,200) -- (axis cs: 128.7,200);
+%\node[red,right] at (axis cs: 117,300) {\small \bf 4G};     
+\end{axis}
+
+\end{tikzpicture}
+
+
+\end{document}
