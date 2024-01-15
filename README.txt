@@ -65,7 +65,7 @@ Due to the space limit by Github, we compress and move dataset/raw folder to
 https://mssn3.cs.purdue.edu/owncloud/index.php/s/qfwrumBoliT3bZJ
 
 
-2) Dataset release and its description
+3) Dataset release and its description
 
 -------------------------------------------------------------------------------
 dataset/raw/cellset_thput: 
