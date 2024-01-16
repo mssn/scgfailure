@@ -62,7 +62,7 @@ In D1 and D2, we mainly run two types of experiments: (1) Heavy traffic: Repeate
     └── ...
 
 Due to the space limit by Github, we compress and move dataset/raw folder to 
-https://mssn3.cs.purdue.edu/owncloud/index.php/s/qfwrumBoliT3bZJ
+https://mssn3.cs.purdue.edu/owncloud/index.php/s/zIJ3MA5YQTj0qUE
 
 
 3) Dataset release and its description
