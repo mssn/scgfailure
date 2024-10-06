@@ -1,0 +1,6 @@
+th_index_low,thput_low,thput_high,trigger_event,total_instance_num,instance_num,instance_ratio
+0,0,50,rlc-MaxNumRetx,79,29,0.3671
+1,50,100,rlc-MaxNumRetx,36,18,0.5
+2,100,150,rlc-MaxNumRetx,10,5,0.5
+3,150,200,rlc-MaxNumRetx,4,3,0.75
+4,200,1000,rlc-MaxNumRetx,0,0,0

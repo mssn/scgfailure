@@ -1,0 +1,7 @@
+index,dataset,operator,solution,value_10,value_25,value_50,value_75,value_90
+0.0,indy,A,legacy,2.3,6.5,40.0,71.8,97.4
+1.0,indy,T,legacy,1.0,1.0,1.5,1277.5,3573.4
+2.0,indy,V,legacy,191417.6,478541.0,957080.0,1435619.0,1722742.4
+4.0,wl,A,legacy,-277544.2,1.0,1.0,4986.0,3443022.4
+5.0,wl,T,legacy,0.0,0.0,0.0,0.0,0.0
+7.0,dronemeas,T,legacy,1278.0,2196.9,3728.4,5260.0,6178.9

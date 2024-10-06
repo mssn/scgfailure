@@ -1,0 +1,4 @@
+index,timer,trigger_event,total_instance_num,instance_num,instance_ratio
+0.0000,ms20,rlc-MaxNumRetx,0.0000,0.0000,0.0000
+1.0000,ms40,rlc-MaxNumRetx,123.0000,49.0000,0.3984
+2.0000,ms45,rlc-MaxNumRetx,0.0000,0.0000,0.0000

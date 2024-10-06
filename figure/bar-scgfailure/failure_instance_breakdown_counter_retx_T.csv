@@ -1,0 +1,3 @@
+index,counter,trigger_event,total_instance_num,instance_num,instance_ratio
+0.0000,t16,rlc-MaxNumRetx,10.0000,2.0000,0.2000
+1.0000,t32,rlc-MaxNumRetx,26.0000,5.0000,0.1923

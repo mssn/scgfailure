@@ -1,0 +1,7 @@
+index,dataset,operator,solution,value_10,value_25,value_50,value_75,value_90
+0.0,indy,A,fsm,1.6,3.5,5.0,15.8,47.3
+1.0,indy,T,fsm,1.0,1.0,1.0,1.5,2.4
+2.0,indy,V,fsm,1.2,1.5,2.0,2.5,2.8
+4.0,wl,A,fsm,1.0,1.0,1.0,2.0,2.0
+5.0,wl,T,fsm,0.0,0.0,0.0,0.0,0.0
+7.0,dronemeas,T,fsm,2.0,2.0,2.0,2.0,2.0

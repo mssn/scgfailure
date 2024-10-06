@@ -1,0 +1,357 @@
+% Template for a CDF graph
+%
+% Author: Zengwen Yuan
+% Version: 1.0  2017-03-08 init version
+% Note: to use package fontspec,
+% use XeLaTeX to compile
+
+\documentclass{standalone}
+\usepackage{siunitx}
+% \usepackage{tikz}
+\usepackage{pgfplots}
+\usepackage{pgfplotstable}
+%\usepackage{verbatim}
+\usepackage{tikz}
+\usepackage{helvet,etoolbox}
+%\usepackage{sansmath}
+\usepackage[active,tightpage]{preview}
+\PreviewEnvironment{tikzpicture}
+\setlength\PreviewBorder{1pt}
+\usetikzlibrary{patterns}
+\usetikzlibrary{pgfplots.statistics}
+
+\pgfplotsset{compat=newest}
+
+%\usepackage{fontspec}
+%\setmainfont[
+%BoldFont={Arial Bold},
+%ItalicFont={Arial Italic},
+%BoldItalicFont={Arial Bold Italic}
+%]{Arial}
+
+%\AtBeginEnvironment{tikzpicture}{\sansmath}
+%\AtEndEnvironment{tikzpicture}{\unsansmath}
+
+% # user-study-sync-overhead-context-tx-v2.txt
+%\pgfplotstableread{
+%0   0
+%1000   0.1
+%5000   0.8
+%10000   0.95
+%20000   1
+%}{\fakedata}
+
+\makeatletter
+\pgfplotsset{
+my filter/.style args={every#1between#2and#3}{%
+/pgfplots/x filter/.append code={%
+\ifnum\coordindex<#2%
+  % Nothing
+\else% Did we pass #3?
+  \ifnum\coordindex>#3%
+    %Nothing
+  \else% Ok filter is on, don't disturb \pgfmathresult for convenience
+    \pgfmathsetmacro\temp{int(mod(\coordindex,#1))}%
+    \ifnum0=\temp\relax% Are we on the nth point?
+      % Yes do nothing let it pass
+    \else% discard it
+      \let\pgfmathresult\pgfutil@empty
+    \fi%
+  \fi%
+\fi%
+}}}
+\makeatother
+
+
+
+\pgfplotsset{
+    compat=newest,
+    legend image code/.code={
+        \draw[mark repeat=2,mark phase=2]
+        plot coordinates {
+            (0cm,0cm)
+            (0.3cm,0cm)        %% default is (0.3cm,0cm)
+            (0.6cm,0cm)         %% default is (0.6cm,0cm)
+        };%
+    }
+}
+
+\makeatletter
+\pgfplotsset{
+	boxplot prepared from table/.code={
+		\def\tikz@plot@handler{\pgfplotsplothandlerboxplotprepared}%
+		\pgfplotsset{
+			/pgfplots/boxplot prepared from table/.cd,
+			#1,
+		}
+	},
+	/pgfplots/boxplot prepared from table/.cd,
+	table/.code={\pgfplotstablecopy{#1}\to\boxplot@datatable},
+	row/.initial=0,
+	make style readable from table/.style={
+		#1/.code={
+			\pgfplotstablegetelem{\pgfkeysvalueof{/pgfplots/boxplot prepared from table/row}}{##1}\of\boxplot@datatable
+			\pgfplotsset{boxplot/#1/.expand once={\pgfplotsretval}}
+		}
+	},
+	make style readable from table=lower whisker,
+	make style readable from table=upper whisker,
+	make style readable from table=lower quartile,
+	make style readable from table=upper quartile,
+	make style readable from table=median,
+	make style readable from table=lower notch,
+	make style readable from table=upper notch,
+}
+\makeatother
+
+%\definecolor{myblue}{HTML}{0070C0}
+%\definecolor{myred}{HTML}{C00000}
+%\definecolor{mypurple}{HTML}{7030A0}
+%\definecolor{mygreen}{HTML}{00B050}
+
+\definecolor{myblue}{HTML}{0070C0}
+\definecolor{myred}{HTML}{C00000}
+\definecolor{mypurple}{HTML}{7030A0}
+\definecolor{mygreen}{HTML}{00B050}
+
+% \documentclass{standalone}
+\usepackage{pgfplots}
+% Nice color sets, see see http://colorbrewer2.org/	
+\usepgfplotslibrary{colorbrewer}
+% initialize Set1-4 from colorbrewer (we're comparing 4 classes),
+\pgfplotsset{compat = 1.15, cycle list/Set1-8} 
+% Tikz is loaded automatically by pgfplots
+\usetikzlibrary{pgfplots.statistics, pgfplots.colorbrewer} 
+% provides \pgfplotstabletranspose
+\usepackage{pgfplotstable}
+\usepackage{filecontents}
+
+\begin{document}
+
+%\begin{tikzpicture}[font=\sffamily]
+\begin{tikzpicture}
+	
+\begin{axis}[
+    %ymode = log,
+    ybar,
+    reverse legend,
+    %xbar=2*\pgflinewidth,
+    xmax    = 8,
+    xmin    = -0.5,
+    ymax    = 1.1,%12.5,
+    ymin    = 0,
+    width   =  5 cm,
+    height  =  2.5 cm,
+    scale only axis = true,
+    xtick align = inside,
+    tick label style={/pgf/number format/assume math mode=true},
+    xtick = {0, 1, 2, 4, 5, 7},
+    xticklabels = {\textbf{A}, \textbf{T}, \textbf{V}, \textbf{A}, \textbf{T}, \textbf{T}},
+    ytick = {0, 0.5, 1},
+    yticklabels = {0, 50, 100},
+    ymajorgrids=true,
+    %enlarge y limits=0.25,
+    bar width=3pt,
+    xtick style={draw=none},
+    %yticklabels = {0m, 30m, 60m, 90m, 120m},
+    % % xticklabel pos=right,
+    % xtick pos = left,
+    % ytick pos = left,
+    % % yticklabel pos=right,
+    % % enlargelimits=0.15,
+    ylabel={Ratio (\%)},
+    xlabel={},
+    %xlabel={BW \small{(MHz)}},
+    xlabel style={
+        %font=\small,
+        % at={(current axis.north west)},
+        % rotate=-90,
+       % xshift= -10pt,
+        yshift = 5pt,
+    },
+    ylabel style={
+        %font=\small,
+        % at={(current axis.north west)},
+        % rotate=-90,
+        %text width=2.8cm,
+        align=center,
+        xshift= 0pt,
+        yshift = -10 pt,
+    },
+    yticklabel style={
+        %font=\small,
+       % align=center,
+        xshift=  1mm,
+        yshift =  0mm,
+    },
+%  yticklabel style={
+%        %font=\small,
+%        align=center,
+%        xshift= 8 pt,
+%        yshift = 0 pt,
+%    },
+  xticklabel style={
+        %font=\small,
+        align=center,
+        xshift= 0pt,
+        yshift = 3pt,
+    },
+legend style={
+	at      = {(0, 1)},
+	%font    = \small,
+	%fill    = none,
+	%draw    = none,
+	anchor  = north west,
+	legend cell align   = left,
+	legend columns      = 2,
+	%draw=none,
+	inner sep=1pt,
+	outer sep=0pt,
+	row sep = 3pt,
+	%nodes={scale=0.7, transform shape},
+	%nodes={scale=1, transform shape},
+	%nodes={scale=0.83},
+},
+legend image code/.code={
+        \draw [#1] (0cm,-0.1cm) rectangle (0.1cm,0.1cm); },
+    ]
+
+\addplot+[
+myblue,
+line width=0.5pt,
+%color=blue,
+fill=myblue,  fill opacity=0.1,
+bar width= 4pt, 
+postaction={
+	pattern=north east lines,
+	pattern color=myblue,
+	opacity=0.5,
+}
+]
+table[
+x = index,
+y = r_sfm_ratio,
+col sep=comma,
+] {failure_instance_stat_what_if_study_r.csv};
+\addlegendentry{\texttt{SFM}}
+
+\addplot+[
+myred,
+line width=0.5pt,
+%color=blue,
+fill=myred, fill opacity=0.1,
+bar width= 4pt,
+postaction={
+	pattern=north west lines,
+	pattern color=myred,
+	opacity=0.5,
+}
+]
+table[
+x = index,
+y = r_ratio,
+col sep=comma,
+] {failure_instance_stat_what_if_study_r.csv};
+\addlegendentry{\texttt{Legacy}}
+
+\node[] at (axis cs: 1,0.8) {\normalsize {\bf D1}};
+\node[] at (axis cs: 4.5,0.8) {\normalsize {\bf D2}};
+\node[] at (axis cs: 7,0.8) {\normalsize {\bf D3}};
+
+%\addplot+[mark=none, densely dashed,gray,line width=0.5pt] coordinates {(3,0) (3,1.1)};
+
+\end{axis}
+
+\begin{axis}[
+    %ymode = log,
+    reverse legend,
+    %xbar=2*\pgflinewidth,
+    xmax    = 8,
+    xmin    = -0.5,
+    ymax    = 1.1,%12.5,
+    ymin    = 0,
+    width   =  5 cm,
+    height  =  2.5 cm,
+    scale only axis = true,
+    xtick align = inside,
+    tick label style={/pgf/number format/assume math mode=true},
+    xtick = {0, 1, 2, 4, 5},
+    xticklabels = {},
+    ytick = {0, 0.5, 1},
+    yticklabels = {0, 50, 100},
+    %ymajorgrids=true,
+    %enlarge y limits=0.25,
+    xtick style={draw=none},
+    ytick style={draw=none},
+    %yticklabels = {0m, 30m, 60m, 90m, 120m},
+    % % xticklabel pos=right,
+    % xtick pos = left,
+    % ytick pos = left,
+    % % yticklabel pos=right,
+    % % enlargelimits=0.15,
+    ylabel={},
+    xlabel={},
+    %xlabel={BW \small{(MHz)}},
+    xlabel style={
+        %font=\small,
+        % at={(current axis.north west)},
+        % rotate=-90,
+       % xshift= -10pt,
+        yshift = 5pt,
+    },
+    ylabel style={
+        %font=\small,
+        % at={(current axis.north west)},
+        % rotate=-90,
+        %text width=2.8cm,
+        align=center,
+        xshift= 0pt,
+        yshift = -10 pt,
+    },
+    yticklabel style={
+        %font=\small,
+       % align=center,
+        xshift=  1mm,
+        yshift =  0mm,
+    },
+%  yticklabel style={
+%        %font=\small,
+%        align=center,
+%        xshift= 8 pt,
+%        yshift = 0 pt,
+%    },
+  xticklabel style={
+        %font=\small,
+        align=center,
+        xshift= 0pt,
+        yshift = 3pt,
+    },
+legend style={
+	at      = {(0, 1)},
+	%font    = \small,
+	%fill    = none,
+	%draw    = none,
+	anchor  = north west,
+	legend cell align   = left,
+	legend columns      = 1,
+	%draw=none,
+	inner sep=1pt,
+	outer sep=0pt,
+	row sep = 3pt,
+	%nodes={scale=0.7, transform shape},
+	nodes={scale=1, transform shape},
+	%nodes={scale=0.83},
+},
+legend image code/.code={
+        \draw [#1] (0cm,-0.1cm) rectangle (0.1cm,0.1cm); },
+    ]
+
+\addplot+[mark=none, densely dashed,gray,line width=0.5pt] coordinates {(3,0) (3,0.89)};
+\addplot+[mark=none, densely dashed,gray,line width=0.5pt] coordinates {(6,0) (6,1.1)};
+
+\end{axis}
+
+\end{tikzpicture}
+
+\end{document}
+

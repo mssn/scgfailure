@@ -1,0 +1,7 @@
+index,dataset,operator,m_num,m_ratio,m_sfm_num,m_sfm_ratio
+0,indy,A,26,0.0707,5,0.0136
+1,indy,T,5,0.1515,4,0.1212
+2,indy,V,40,0.2878,9,0.0647
+4,wl,A,9,0.0552,3,0.0184
+5,wl,T,29,0.2566,19,0.1681
+7,dronemeas,T,6,0.0328,2,0.0109

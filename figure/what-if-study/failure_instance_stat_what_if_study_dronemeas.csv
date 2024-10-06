@@ -1,0 +1,3 @@
+index,dataset,operator,solution,u_num,u_ratio,m_num,m_ratio,r_num,r_ratio,ok_num,ok_ratio
+0.0000,dronemeas,T,legacy,55.0000,0.1957,11.0000,0.0391,143.0000,0.5089,72.0000,0.2562
+0.0000,dronemeas,T,sfm,2.0000,0.0071,7.0000,0.0249,35.0000,0.1246,237.0000,0.8434
